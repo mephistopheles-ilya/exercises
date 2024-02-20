@@ -47,19 +47,29 @@ void fill_file(std::fstream* baza_file, std::fstream* female_names, std::fstream
         }
         *baza_file << ' ' << (1'000'000 + rand()%9'000'000) << (1'000'000 + rand()%9'000'000) << (1'000'00 + rand()%9'000'00)
                 << ' ' <<  static_cast<double>(rand()%100) + (static_cast<double>(rand())/RAND_MAX) * static_cast<double>(rand()%10000) << 
-                ' ' << currency[rand()%(currency_size)] << " ; ";
+                ' ' << currency[rand()%(currency_size)] << " ;";
        for(int j = 0, k = 1 + rand()%5; j < k; ++j)
         {
-            int month = 1 + rand()%12, year = 2020 + rand()%4, day;
+            int month = 1 + rand()%12, year = 2020 + rand()%4, hour = rand()%24, minute = rand()%60, second = rand()%60, day;
             if(((month <= 7) && (month%2 == 1)) || ((month > 7) && (month%2 == 0))) day = 1 + rand()%31;
             else if(month != 2) day = 1 + rand()%30;
             else if(year%4 == 0) day = 1 + rand()%29;
             else day = 1 + rand()%28;
-            *baza_file <<  static_cast<double>(rand()%100) + (static_cast<double>(rand())/RAND_MAX) * static_cast<double>(rand()%10000) << ' ' <<
+            *baza_file << ' ' <<  static_cast<double>(rand()%100) + (static_cast<double>(rand())/RAND_MAX) * static_cast<double>(rand()%10000) << ' ' <<
                 currency[rand()%(currency_size)] << ' ' << sgn[rand()%2] << ' ' << (1'000'000 + rand()%9'000'000) << (1'000'000 + rand()%9'000'000) << (1'000'00 + rand()%9'000'00)
-                << ' ' << rand()%60 << '/' << rand()%60 << '/' << rand()%24 << '/' << day << '/' << month << '/' << year << " ; ";
+                << ' ' << year << '/';
+                if(month < 10) *baza_file << 0;
+                *baza_file << month << '/';
+                if(day < 10) *baza_file << 0;
+                *baza_file << day << '/';
+                if(hour < 10) *baza_file << 0;
+                *baza_file << hour << '/';
+                if(minute < 10) *baza_file << 0;
+                *baza_file << minute << '/';
+                if(second < 10) *baza_file << 0;
+                *baza_file << second << " ;";
        }
-       *baza_file << '\n';
+       *baza_file << '#' << '\n';
  
     }
 }
