@@ -20,7 +20,7 @@ void fill_file(std::fstream* baza_file, std::fstream* female_names, std::fstream
     fill_vector(male_names, mn);
     fill_vector(male_surnames, ms);
     fill_vector(male_surnames2, ms2);
-    std::vector<std::string> currency{"RUB", "USD", "EUR"};
+    std::vector<std::string> currency{"RUB", "USD", "EUR", "AUD", "BYN", "BGN", "CAD", "NOK", "SEK" };
     std::string sgn = "-+";
 
 
@@ -31,7 +31,8 @@ void fill_file(std::fstream* baza_file, std::fstream* female_names, std::fstream
     *baza_file << std::fixed;
     for(int i = 0; i < 10; ++i)
     {
-       int gender = rand()%2;
+        int gender = rand()%2;
+        //int gender = 1;
         if(gender == 0)
         {
             int name = rand()%(fn_size);
@@ -40,9 +41,12 @@ void fill_file(std::fstream* baza_file, std::fstream* female_names, std::fstream
             *baza_file << fn[name] << ' ' << fs[surname] << ' ' << fs2[surname2];
         }else
         {
-            int name = rand()%(mn_size);
+            /*int name = rand()%(mn_size);
             int surname = rand()%(ms_size);
-            int surname2 = rand()%(ms2_size);
+            int surname2 = rand()%(ms2_size);*/
+            int name  = rand()%(10);
+            int surname = rand()%(10);
+            int surname2 = rand()%(10);
             *baza_file << mn[name] << ' ' << ms[surname] << ' ' << ms2[surname2];
         }
         *baza_file << ' ' << (1'000'000 + rand()%9'000'000) << (1'000'000 + rand()%9'000'000) << (1'000'00 + rand()%9'000'00)
