@@ -1,63 +1,33 @@
 #include "classes.h" 
 
+
+double inf  = std::numeric_limits<double>::infinity();
+
 int main(void)
 {
-    Baza baza("file_baza");
-    vector<list<Man>::iterator> v1;
+    Baza baza;
+    baza.read_currency("file_currency");
+    baza.read_records("file_baza");
 
-    cout << baza.find_n(v1, "Авдей", "Авдеев", "Авдеевич", 1000, 10'000, "RUB", "-") << endl;
-    for(int i = 0; i < v1.size(); ++i) cout << (*v1[i]) << endl;
+    vector<list<Operations>::iterator> v1;
+    vector<list<Man>::iterator> v2;
+
+    cout << baza.find_o(v1, "-", inf, inf, "-", "2024/02/27/02/15/27", "2024/02/27/02/15/27") << endl;
+    for(size_t i = 0; i < v1.size(); ++i) cout << (*v1[i]) << endl << endl;
     v1.clear();
-    //cout << baza.remove_n(v1) << endl;
-    //cout << baza.find_n(v1, "Авдей", "Авдеев", "Авдеевич", 1000, 10'000, "RUB", "-") << endl;
 
-    cout << baza.find_n(v1, "Авдей", "-", "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "-") << endl;
+    baza.create_operation("26426223769674995521", 900, "NOK", false, "2024/02/27/02/15/27", "78090564995732893703");  
+
+    cout << baza.find_o(v1, "-", inf, inf, "-", "2024/02/27/02/15/27", "2024/02/27/02/15/27") << endl;
+    for(size_t i = 0; i < v1.size(); ++i) cout << (*v1[i]) << endl << endl;
     v1.clear();
-    //cout << baza.remove_n(v1) << endl;
-    //cout << baza.find_n(v1, "Авдей", "-", "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "-") << endl;
 
-    cout << baza.find_n(v1, "-", "Авдеев", "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "-") << endl;
-    v1.clear();
-    //cout << baza.remove_n(v1) << endl;
-    //cout << baza.find_n(v1, "-", "Авдеев", "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "-") << endl;
+    cout << baza.find_n(v2, "Авдей", "Авдеев", "Авдеевич", inf, inf, "-", "-") << endl;
+    for(size_t i = 0; i < v2.size(); ++i) cout << (*v2[i]) << endl;
+    cout << baza.remove_n(v2) << endl << endl;
 
-    cout << baza.find_n(v1, "-", "-", "Авдеевич", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "-") << endl;
-    v1.clear();
-    //cout << baza.remove_n(v1) << endl;
-    //cout << baza.find_n(v1, "-", "-", "Авдеевич", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "-") << endl;
+    cout << baza.find_n(v2, "Авдей", "Авдеев", "Авдеевич", inf, inf, "-", "-") << endl;
 
-    cout << baza.find_n(v1, "-", "-", "-", 1000, 10'000, "-", "-") << endl;
-    v1.clear();
-    //cout << baza.remove_n(v1) << endl;
-    //cout << baza.find_n(v1, "-", "-", "-", 1000, 10'000, "-", "-") << endl;
-
-    cout << baza.find_n(v1, "-", "-", "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "RUB", "-") << endl;
-    v1.clear();
-    //cout << baza.remove_n(v1) << endl;
-    //cout << baza.find_n(v1, "-", "-", "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "RUB", "-") << endl;
-
-
-
-    vector<list<Operations>::iterator> v2;
-    cout << baza.find_o(v2, "-", 1000, 10'000, "RUB", "2022/00/00/00/00/00", "2022/12/31/24/60/60") << endl;
-    v2.clear();
-    //cout << baza.remove_o(v2) << endl;
-    //cout << baza.find_o(v2, "-", 1000, 10'000, "RUB", "2022/00/00/00/00/00", "2022/12/31/24/60/60") << endl;
-
-    cout << baza.find_o(v2, "-", 1000, 10'000, "-", "-", "-") << endl;
-    v2.clear();
-    //cout << baza.remove_o(v2) << endl;
-    //cout << baza.find_o(v2, "-", 1000, 10'000, "RUB", "2022/00/00/00/00/00", "2022/12/31/24/60/60") << endl;
-
-    cout << baza.find_o(v2, "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "RUB", "-", "-") << endl;
-    v2.clear();
-    //cout << baza.remove_o(v2) << endl;
-    //cout << baza.find_o(v2, "-", 1000, 10'000, "RUB", "2022/00/00/00/00/00", "2022/12/31/24/60/60") << endl;
-
-    cout << baza.find_o(v2, "-", std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), "-", "2022/00/00/00/00/00", "2022/12/31/24/60/60") << endl;
-    v2.clear();
-    //cout << baza.remove_o(v2) << endl;
-    //cout << baza.find_o(v2, "-", 1000, 10'000, "RUB", "2022/00/00/00/00/00", "2022/12/31/24/60/60") << endl;
 
 
 

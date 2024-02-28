@@ -10,7 +10,7 @@ void fill_vector(std::fstream* file, std::vector<std::string>& v)
     }
 }
 
-void fill_file(std::fstream* baza_file, std::fstream* female_names, std::fstream* female_surnames, std::fstream* female_surnames2,
+void fill_file(std::fstream* file_currency, std::fstream* baza_file, std::fstream* female_names, std::fstream* female_surnames, std::fstream* female_surnames2,
         std::fstream* male_names, std::fstream* male_surnames, std::fstream* male_surnames2)
 {
     std::vector<std::string> fn, fs, fs2, mn, ms, ms2;
@@ -23,13 +23,30 @@ void fill_file(std::fstream* baza_file, std::fstream* female_names, std::fstream
     std::vector<std::string> currency{"RUB", "USD", "EUR", "AUD", "BYN", "BGN", "CAD", "NOK", "SEK" };
     std::string sgn = "-+";
 
-
-    int fn_size = fn.size(), fs_size = fs.size(), fs2_size = fs2.size(), mn_size = mn.size(), ms_size = ms.size(), ms2_size = ms2.size();
-    int currency_size = currency.size();
     std::srand(std::time(nullptr));
+    *file_currency << std::setprecision(2);
+    *file_currency << std::fixed;
+    std::string current_currency, next_currency;
+    for(size_t  i = 0; i < currency.size(); ++i)
+    {
+        current_currency = currency[i];
+        for(size_t j = i; j < currency.size(); ++j)
+        {
+            double cur = 0.1 +  static_cast<double>(rand()%3) + static_cast<double>(rand())/RAND_MAX;
+            next_currency = currency[j];
+            if(i == j) cur = 1;
+            *file_currency << current_currency << ' ' << "to" << ' '  << next_currency << ' ' << cur << '\n';
+            *file_currency << next_currency << ' ' << "to" << ' '  << current_currency << ' ' << 1/cur << '\n';
+        }
+    }
+
+
+
+    int fn_size = fn.size(), fs_size = fs.size(), fs2_size = fs2.size()/*, mn_size = mn.size(), ms_size = ms.size(), ms2_size = ms2.size()*/;
+    int currency_size = currency.size();
     *baza_file << std::setprecision(2);
     *baza_file << std::fixed;
-    for(int i = 0; i < 10; ++i)
+    for(int i = 0; i < 100'000; ++i)
     {
         int gender = rand()%2;
         //int gender = 1;

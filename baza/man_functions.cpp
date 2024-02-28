@@ -15,26 +15,5 @@ ostream& operator << (ostream& s, const vector<list<Man>::iterator>& v)
     return s;
 }
 
-Man& Man :: operator = (const Man& man)
-{
-    name = man.name;
-    surname = man.surname;
-    surname2 = man.surname2;
-    account_number = man.account_number;
-    money = man.money;
-    currency = man.currency;
-    return *this;
-}
-
-Man& Man :: operator = (Man&& man)
-{
-    name = move(man.name);
-    surname = move(man.surname);
-    surname2 = move(man.surname2);
-    account_number = move(man.account_number);
-    money = move(man.money);
-    currency = move(man.currency);
-    return *this;
-}
 
  

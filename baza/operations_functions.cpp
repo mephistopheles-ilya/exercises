@@ -1,26 +1,5 @@
 #include "classes.h"
 
-Operations& Operations :: operator = (Operations&& op)
-{
-    my_account_number = move(op.my_account_number);
-    money = move(op.money);
-    currency = move(op.currency);
-    account_number = move(account_number);
-    data = move(op.data);
-    receive = op.receive;
-    return *this;
-}
-
-Operations& Operations :: operator = (const Operations& op)
-{
-    my_account_number = move(op.my_account_number);
-    money = op.money;
-    currency = op.currency;
-    account_number = op.account_number;
-    data = op.data;
-    receive = op.receive;
-    return *this;
-}
 
 ostream& operator << (ostream& s, const vector<list<Operations>::iterator>& v)
 {
