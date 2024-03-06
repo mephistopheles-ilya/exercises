@@ -302,16 +302,16 @@ size_t Baza :: find_money_n(vector<list<Man>::iterator>& v, double lower, double
     size_t j = 0;
     multimap<double, list<Man>::iterator>::iterator a, b;
 
-    if(lower == std::numeric_limits<double>::infinity()) a = tree_money.begin();
+    if(lower >= std::numeric_limits<double>::infinity()) a = tree_money.begin();
     else a = tree_money.lower_bound(lower);
 
-    if(upper == std::numeric_limits<double>::infinity()) b = tree_money.end();
+    if(upper >= std::numeric_limits<double>::infinity()) b = tree_money.end();
     else b = tree_money.upper_bound(upper);
 
     for(; a != b; ++a, ++j)
         v.push_back((a -> second));
     return j;
-};
+}
 
 
 size_t Baza :: find_currency_n(vector<list<Man>::iterator>& v, const string& currency)
@@ -345,10 +345,10 @@ size_t Baza :: find_money_o(vector<list<Operations>::iterator>& v, double lower,
     size_t j = 0;
     multimap<double, list<Operations>::iterator>::iterator a, b;
 
-    if(lower == std::numeric_limits<double>::infinity()) a = tree_op_money.begin();
+    if(lower >= std::numeric_limits<double>::infinity()) a = tree_op_money.begin();
     else a = tree_op_money.lower_bound(lower);
 
-    if(upper == std::numeric_limits<double>::infinity()) b = tree_op_money.end();
+    if(upper >= std::numeric_limits<double>::infinity()) b = tree_op_money.end();
     else b = tree_op_money.upper_bound(upper);
 
     for(; a != b; ++a, ++j)
@@ -420,7 +420,7 @@ size_t Baza :: find_n(vector<list<Man>::iterator>& v, const string& name, const 
         vv.push_back(&v_surname2);
     }
 
-    if(lower_money != std::numeric_limits<double>::infinity() && upper_money != std::numeric_limits<double>::infinity())
+    if(lower_money < std::numeric_limits<double>::infinity() || upper_money < std::numeric_limits<double>::infinity())
     {
         find_money_n(v_money, lower_money, upper_money);
         sort(v_money.begin(), v_money.end(), cmp_n);
@@ -484,7 +484,7 @@ size_t Baza :: find_o(vector<list<Operations>::iterator>& v, const string& accou
         vv.push_back(&v_account_number);
     }
 
-    if(lower_money != std::numeric_limits<double>::infinity() && upper_money != std::numeric_limits<double>::infinity())
+    if(lower_money < std::numeric_limits<double>::infinity() || upper_money < std::numeric_limits<double>::infinity())
     {
         find_money_o(v_money, lower_money, upper_money);
         sort(v_money.begin(), v_money.end(), cmp_o);
