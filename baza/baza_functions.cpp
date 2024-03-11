@@ -192,6 +192,7 @@ bool Baza :: create_operation(const string& my_account, double money, const stri
     coef1 = tree_double_currency.find(cur1) -> second;
     coef2 = tree_double_currency.find(cur2) -> second;
 
+
     if(add)
     {
         op1.Receive() = true;
@@ -491,7 +492,7 @@ size_t Baza :: find_o(vector<list<Operations>::iterator>& v, const string& accou
         vv.push_back(&v_money);
     }
 
-    if(lower_data != "-" && upper_data != "-")
+    if(lower_data != "-" || upper_data != "-")
     {
         find_data(v_data, lower_data, upper_data);
         sort(v_data.begin(), v_data.end(), cmp_o);
@@ -621,4 +622,279 @@ size_t Baza :: remove_o(vector<list<Operations>::iterator>& v)
     v.clear();
     return j;
 }
+
+
+//FIND OR DELETE FROM STRING:w
+size_t Baza :: work_with_str(const string& str)
+{
+
+    if(str.find("find_n") < str.length() || str.find("remove_n") < str.length())
+    {
+        istringstream in(str);
+        string name, surname, surname2, lower_money, upper_money, currency, account_number;
+        double l_money, u_money;
+        size_t pos = 0;
+        if((pos = str.find("name=")) < str.length())
+        {
+            in.seekg(pos + string("name=").length());
+            in >> name;
+            in.seekg(0);
+        }else 
+        {
+            name = "-";
+        }
+
+        if((pos = str.find("surname=")) < str.length())
+        {
+            in.seekg(pos + string("surname=").length());
+            in >> surname;
+            in.seekg(0);
+        }else
+        {
+            surname = "-";
+        }
+
+        if((pos = str.find("surname2=")) < str.length())
+        {
+            in.seekg(pos + string("surname2=").length());
+            in >> surname2;
+            in.seekg(0);
+        }else
+        {
+            surname2 = "-";
+        }
+
+        if((pos = str.find("currency=")) < str.length())
+        {
+            in.seekg(pos + string("currency=").length());
+            in >> currency;
+            in.seekg(0);
+        }else
+        {
+            currency = "-";
+        }
+
+        if((pos = str.find("account_number=")) < str.length())
+        {
+            in.seekg(pos + string("account_number=").length());
+            in >> account_number;
+            in.seekg(0);
+        }else
+        {
+            account_number = "-";
+        }
+
+        if((pos = str.find("money=")) < str.length())
+        {
+            in.seekg(pos + string("money=").length());
+            in >> lower_money;
+            in >> upper_money;
+
+            if(lower_money == "inf")
+            {
+                l_money = std::numeric_limits<double>::infinity();
+            }else
+            {
+                l_money = stod(lower_money);
+            }
+            if(upper_money == "inf")
+            {
+                u_money = std::numeric_limits<double>::infinity();
+            }else
+            {
+                u_money = stod(upper_money);
+            }
+
+            in.seekg(0);
+        }else
+        {
+            l_money = u_money = std::numeric_limits<double>::infinity();
+        }
+
+        vector<list<Man>::iterator> v;
+        find_n(v, name, surname, surname2, l_money, u_money, currency, account_number);
+        size_t to_return = v.size();
+        if(str.find("find_n") < str.size())
+        {
+            for(size_t i = 0; i < v.size(); ++i)
+            {
+                cout << (*v[i]) << endl;
+            }
+        }else
+        {
+            remove_n(v);
+        }
+        return to_return;
+    }
+
+    else if(str.find("find_o") < str.length() || str.find("remove_o") < str.length())
+    {
+        istringstream in(str);
+        string account_number, lower_money, upper_money, currency, lower_data, upper_data;
+        double l_money, u_money;
+        size_t pos = 0;
+        if((pos = str.find("account_number=")) < str.length())
+        {
+            in.seekg(pos + string("account_number=").length());
+            in >> account_number;
+            in.seekg(0);
+        }else 
+        {
+            account_number = "-";
+        }
+
+        if((pos = str.find("currency=")) < str.length())
+        {
+            in.seekg(pos + string("currency=").length());
+            in >> currency;
+            in.seekg(0);
+        }else
+        {
+            currency = "-";
+        }
+
+        if((pos = str.find("money=")) < str.length())
+        {
+            in.seekg(pos + string("money=").length());
+            in >> lower_money;
+            in >> upper_money;
+        
+            if(lower_money == "inf")
+            {
+                l_money = std::numeric_limits<double>::infinity();
+            }else
+            {
+                l_money = stod(lower_money);
+            }
+            if(upper_money == "inf")
+            {
+                u_money = std::numeric_limits<double>::infinity();
+            }else
+            {
+                u_money = stod(upper_money);
+            }
+
+            in.seekg(0);
+        }else
+        {
+            l_money = u_money = std::numeric_limits<double>::infinity();
+        }
+
+        if((pos = str.find("data=")) < str.length())
+        {
+            in.seekg(pos + string("data=").length());
+            in >> lower_data;
+            in >> upper_data;
+            in.seekg(0);
+        }else
+        {
+            lower_data = upper_data = "-";
+        }
+
+        vector<list<Operations>::iterator> v;
+        find_o(v, account_number, l_money, u_money, currency, lower_data, upper_data);
+        size_t to_return = v.size();
+        if(str.find("find_o") < str.length())
+        {
+            for(size_t i = 0; i < v.size(); ++i)
+            {
+                cout << (*v[i]) << endl;
+            }
+        }else
+        {
+            remove_o(v);
+        }
+        return to_return;
+    }
+    else if(str.find("create_operation") < str.length())
+    {
+        istringstream in(str);
+        string my_account, money, currency, add, data, account;
+        double d_money;
+        bool b_add;
+        size_t pos = 0;
+        if((pos = str.find("my_account=")) < str.length())
+        {
+            in.seekg(pos + string("my_account=").length());
+            in >> my_account;
+            in.seekg(0);
+        }else 
+        {
+            my_account = "-";
+        }
+
+        if((pos = str.rfind("account=")) < str.length())
+        {
+            in.seekg(pos + string("account=").length());
+            in >> account;
+            in.seekg(0);
+        }else 
+        {
+            account = "-";
+        }
  
+        if((pos = str.find("currency=")) < str.length())
+        {
+            in.seekg(pos + string("currency=").length());
+            in >> currency;
+            in.seekg(0);
+        }else
+        {
+            currency = "-";
+        }
+
+        if((pos = str.find("money=")) < str.length())
+        {
+            in.seekg(pos + string("money=").length());
+            in >> money;
+            d_money = stod(money);
+            in.seekg(0);
+        }else
+        {
+            d_money = 0;
+        }
+
+        if((pos = str.find("data=")) < str.length())
+        {
+            in.seekg(pos + string("data=").length());
+            in >> data;
+            in.seekg(0);
+        }else
+        {
+            data = "-";
+        }
+
+        if((pos = str.find("add=")) < str.length())
+        {
+            in.seekg(pos + string("add=").length());
+            in >> add;
+            if(add == "+") b_add = true;
+            else b_add = false;
+            in.seekg(0);
+        }else
+        {
+            b_add = true;
+        }
+
+        create_operation(my_account, d_money, currency, b_add, data, account);
+        return 2;
+    }
+
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

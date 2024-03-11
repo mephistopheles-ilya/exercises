@@ -9,6 +9,7 @@
 #include <limits>
 #include <algorithm>
 #include <cstdint>
+#include <sstream>
 
 using std::cout;
 using std::endl;
@@ -20,6 +21,8 @@ using std::multimap;
 using std::fstream;
 using std::ostream;
 using std::sort;
+using std::cin;
+using std::istringstream;
 
 class Man;
 class Operations;
@@ -132,6 +135,10 @@ public:
     //remove
     size_t remove_n(vector<list<Man>::iterator>& v);
     size_t remove_o(vector<list<Operations>::iterator>& v);
+
+    
+    //find or delte from string
+    size_t work_with_str(const string& str);
 
 };
 
