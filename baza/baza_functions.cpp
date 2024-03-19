@@ -119,7 +119,7 @@ bool Baza :: read_currency(const char* file)
         cap_line.clear();
     }
     file_currency.close();
-    cout << "currency red from file\n";
+    cout << "currency read from file\n";
     return true;
 }
 
@@ -263,14 +263,6 @@ bool cmp_o(const list<Operations>::iterator& a, const list<Operations>::iterator
 
 
 //FIND
-
-
-list<Man>::iterator Baza :: find_man(const string& account_number)
-{
-    return (tree_account_numbers.find(account_number) -> second);
-}
-
-
 size_t Baza :: find_name(vector<list<Man>::iterator>& v, const string& name)
 {
     size_t j = 0;
@@ -396,7 +388,9 @@ size_t Baza :: find_n(vector<list<Man>::iterator>& v, const string& name, const 
 
     if(account_number != "-") 
     {
-        v.push_back(find_man(account_number));
+        auto a = tree_account_numbers.find(account_number);
+        if(a == tree_account_numbers.end()) return 0;
+        v.push_back(a -> second);
         return 1;
     }
 
@@ -625,7 +619,7 @@ size_t Baza :: remove_o(vector<list<Operations>::iterator>& v)
 
 
 //FIND OR DELETE FROM STRING:w
-size_t Baza :: work_with_str(const string& str)
+size_t Baza :: work_with_str(string& message, vector<list<Man>::iterator>& v1, vector<list<Operations>::iterator>& v2, const string& str)
 {
 
     if(str.find("find_n") < str.length() || str.find("remove_n") < str.length())
@@ -634,9 +628,9 @@ size_t Baza :: work_with_str(const string& str)
         string name, surname, surname2, lower_money, upper_money, currency, account_number;
         double l_money, u_money;
         size_t pos = 0;
-        if((pos = str.find("name=")) < str.length())
+        if((pos = str.find(" name=")) < str.length())
         {
-            in.seekg(pos + string("name=").length());
+            in.seekg(pos + string(" name=").length());
             in >> name;
             in.seekg(0);
         }else 
@@ -711,18 +705,11 @@ size_t Baza :: work_with_str(const string& str)
             l_money = u_money = std::numeric_limits<double>::infinity();
         }
 
-        vector<list<Man>::iterator> v;
-        find_n(v, name, surname, surname2, l_money, u_money, currency, account_number);
-        size_t to_return = v.size();
-        if(str.find("find_n") < str.size())
+        find_n(v1, name, surname, surname2, l_money, u_money, currency, account_number);
+        size_t to_return = v1.size();
+        if(str.find("remove_n") < str.size())
         {
-            for(size_t i = 0; i < v.size(); ++i)
-            {
-                cout << (*v[i]) << endl;
-            }
-        }else
-        {
-            remove_n(v);
+            remove_n(v1);
         }
         return to_return;
     }
@@ -791,18 +778,11 @@ size_t Baza :: work_with_str(const string& str)
             lower_data = upper_data = "-";
         }
 
-        vector<list<Operations>::iterator> v;
-        find_o(v, account_number, l_money, u_money, currency, lower_data, upper_data);
-        size_t to_return = v.size();
-        if(str.find("find_o") < str.length())
+        find_o(v2, account_number, l_money, u_money, currency, lower_data, upper_data);
+        size_t to_return = v2.size();
+        if(str.find("remove_o") < str.length())
         {
-            for(size_t i = 0; i < v.size(); ++i)
-            {
-                cout << (*v[i]) << endl;
-            }
-        }else
-        {
-            remove_o(v);
+            remove_o(v2);
         }
         return to_return;
     }
@@ -876,7 +856,13 @@ size_t Baza :: work_with_str(const string& str)
             b_add = true;
         }
 
-        create_operation(my_account, d_money, currency, b_add, data, account);
+        if(create_operation(my_account, d_money, currency, b_add, data, account))
+        {
+            message = "operation created";
+        }else
+        {
+            message = "problems with creating operation";
+        }
         return 2;
     }
 

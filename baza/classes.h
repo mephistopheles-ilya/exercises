@@ -51,6 +51,8 @@ public:
     const string& CAccount_number() const { return account_number;}
     double CMoney() const { return money;}
     const string& CCurrency() const  { return currency;}
+
+    string create_string() const;
  
     friend ostream& operator << (ostream& a, const Man& man);
 };
@@ -77,6 +79,8 @@ public:
     const string& CAccount_number() const  { return account_number;}
     const string& CData() const { return data;}
     const bool& CReceive() const  { return receive;}
+
+    string create_string() const;
     
     friend ostream& operator << (ostream& s, const Operations& op);
 };
@@ -116,7 +120,6 @@ public:
     void print_o(ostream& s = cout, size_t n = 10);
 
     //find
-    list<Man>::iterator find_man(const string& account_number);
     size_t find_name(vector<list<Man>::iterator>& v, const string& name);
     size_t find_surname(vector<list<Man>::iterator>& v, const string& name);
     size_t find_surname2(vector<list<Man>::iterator>& v, const string& name);
@@ -138,7 +141,7 @@ public:
 
     
     //find or delte from string
-    size_t work_with_str(const string& str);
+    size_t work_with_str(string& message, vector<list<Man>::iterator>& v1, vector<list<Operations>::iterator>& v2, const string& str);
 
 };
 
