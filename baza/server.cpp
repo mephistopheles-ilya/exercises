@@ -26,11 +26,7 @@ int main(void)
     cout << endl;
 
     int sock;
-    //int nbytes;;
-    //unsigned int  size;
-    //struct sockaddr_in addr_from;
     struct sockaddr_in addr_this;
-    //struct hostent *hostinfo;
 
     addr_this.sin_family = AF_INET;
     addr_this.sin_addr.s_addr = INADDR_ANY;

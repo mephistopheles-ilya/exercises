@@ -1,0 +1,10 @@
+find_n name=Авдей surname=Авдеев
+find_n name=Авдей
+find_n name=Авдей surname=Авдеев
+find_n name=Авдей
+find_n name=Авдей surname=Авдеев
+find_n name=Авдей
+find_n name=Авдей surname=Авдеев
+find_n name=Авдей
+find_n name=Авдей surname=Авдеев
+stop

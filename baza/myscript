@@ -1,0 +1,62 @@
+#!/bin/bash
+
+for ((i=1; i<=$1; i++))
+do 
+    param="out$i"
+    touch $param
+done
+
+echo "Files for output created"
+
+for ((i=2; i<=$1; i++))
+do
+    param="in$i"
+    touch $param
+    cp in1 $param
+done
+
+echo "Files for input copied"
+
+for ((i=1; i<=$1; i++))
+do
+    param1="in$i"
+    param2="out$i"
+    echo "Running program ./cli with paramtrs $param1 and $param2"
+    ./cli $param1 $param2 &
+done
+wait
+jobs
+echo "All programs ended"
+
+echo "Starting comparing files"
+
+flag=0
+for ((i=2; i<=$1; i++))
+do 
+    param="out$i"
+    if  diff -q out1 $param 
+    then
+        flag=$(( $flag + 1))
+    else
+        echo "out1 differ from $param"
+    fi
+done 
+
+if [ $flag -eq $(( $1 - 1)) ]
+then
+   echo "All files are equal"
+else
+   echo "Files are not equal"
+fi 
+
+for ((i=2; i<=$1; i++))
+do 
+    param1="in$i"
+    param2="out$i"
+    rm $param1 $param2
+done 
+
+
+
+
+
