@@ -8,12 +8,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/time.h>
-
 #include "classes.h"
 
 #define  SERVER_PORT     5555
@@ -76,7 +70,7 @@ int  main(int argc, char** argv)
         if(writeToServer(sock, in) < 0) break;
         if(readFromServer(sock, out) < 0) break;
     }
-    cout << "The end" << endl;
+    cout << "The end" << endl << endl;
 
     close (sock);
     in.close();
@@ -97,11 +91,9 @@ int  writeToServer (int fd, std::fstream& in)
         return -1;
     }
 
-    unsigned int sl = (rand()%30 + 1) * 1000;
-    //cout << "Sleeping " << sl << " microsec";
+    unsigned int sl = (rand()%500 + 10) * 1000;
     usleep(sl);
 
-    cout << "Send to server: " << str_to_read << endl;
     strcpy(buf, &str_to_read[0]);
 
     nbytes = write(fd, buf, strlen(buf) + 1);
@@ -131,7 +123,6 @@ int  readFromServer (int fd, std::fstream& out)
 
     while(!stop)
     {
-        //nbytes = read(fd, buf, BUFLEN); 
         if(nbytes < 0)
         {
             out << "Error with reading" << endl;
@@ -161,7 +152,10 @@ int  readFromServer (int fd, std::fstream& out)
                         full_part = 1;
                     }
 
-                    if(strcmp(str_to_cmp, "END") == 0) stop = 1;
+                    if(strcmp(str_to_cmp, "END") == 0) 
+                    {
+                        stop = 1;
+                    }
 
                     out << endl;
                     ++i;
@@ -175,6 +169,10 @@ int  readFromServer (int fd, std::fstream& out)
             {
                 full_part = 0;
                 length_to_remember = nbytes - second;
+                for(int i = second, j = 0; i < nbytes; ++i, ++j)
+                {
+                    str_to_cmp[j] = buf[i];
+                }
             }
             memset(buf, 0, BUFLEN);
             if(stop == 1) break;
@@ -183,7 +181,7 @@ int  readFromServer (int fd, std::fstream& out)
     }
 
     out << "Received " << i - 2 << " objects" << endl;
-    cout << "Received " << i - 2 << " objects" << endl;
+    cout << "Received " << i - 2 << " objects" << endl << endl;
 
     return 0;
 }

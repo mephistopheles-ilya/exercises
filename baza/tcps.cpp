@@ -66,89 +66,64 @@ int  main (void)
     act_set[0].revents = 0;
     int num_set = 1;
 
-    while (1)
+    while(true)
     {
-        cout << "Poll wainting" << endl;
-        int ret = poll (act_set, num_set, -1);
-        if (ret < 0)
+        int ret = poll(act_set, num_set, -1);
+        if(ret < 0)
         {
             cout << "Server: poll  failure" << endl;
             return -1;
         }
         if(ret > 0)
         {
-           for(i = 0; i < num_set; ++i)
-           {
-              if (act_set[i].revents & POLLIN)
-              {
-                  cout << "get POLLIN at fd " <<  act_set[i].fd << endl;
-                  act_set[i].revents &= ~POLLIN;
-                  if(i == 0)
-                  {
-                      size = sizeof(client);
-                      cout << "Waitong to accept client" << endl; 
-                      new_sock = accept(act_set[i].fd, reinterpret_cast<struct sockaddr*>(&client), &size);
-                      printf("new client at port %u\n", ntohs(client.sin_port));
-                      if (num_set < 100)
-                      {
-                         act_set[num_set].fd = new_sock;
-                         act_set[num_set].events = POLLIN;
-                         act_set[num_set].revents = 0;
-                         num_set++;
-                      } else
-                      {
-                         cout << "no more sockets for client" << endl;
-                         close(new_sock);
-                      }
-                  }else
-                  {
-                      err = readFromClient(act_set[i].fd, buf);
-                      //printf("%d [%s] %p\n",err,buf, strstr(buf,"stop"));
-                      if(err < 0 || strstr(buf,"stop"))
-                      {
-                          cout << "get stop" << endl;
-
-                          /*if(shutdown(act_set[i].fd, SHUT_WR) == 0)
-                          {
-                              cout << "Soscket shuted down" << endl;
-                          }else
-                          {
-                              cout << "Error with closing socket" << endl;
-                          }*/
-
-                          struct linger so_linger;
-                          so_linger.l_onoff = 1; // enable SO_LINGER option
-                          so_linger.l_linger = 0; // set timeout to 0 seconds
-
-                          if (setsockopt(act_set[i].fd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(so_linger)) < 0)
-                          {
-                              cout << "Error setting SO_LINGER option" << endl;
-                          }
-
-
-                          if(close(act_set[i].fd) == 0)
-                          {
-                              cout << "Socket closed" << endl;
-                          }else
-                          {
-                              cout << "Error with closing socket" << endl;
-                          }
-                          if(i < num_set - 1)
-                          {
-                             act_set[i] = act_set[num_set - 1];
-                             num_set--;
-                             i--;
-                          }
-                      }else
-                      {
-                          writeToClient(act_set[i].fd,buf, baza);
-                      }
-                  }  
-              }
-           }
+            for(i = 0; i < num_set; ++i)
+            {
+                if(act_set[i].revents & POLLIN)
+                {
+                    cout << "get POLLIN at fd " << act_set[i].fd << endl;
+                    act_set[i].revents &= ~POLLIN;
+                    if(i ==0)
+                    {
+                        size = sizeof(client); 
+                        new_sock = accept(act_set[i].fd, reinterpret_cast<struct sockaddr*>(&client), &size);
+                        cout << "new client at port " <<  ntohs(client.sin_port) << endl;
+                        if (num_set < 100)
+                        {
+                            act_set[num_set].fd = new_sock;
+                            act_set[num_set].events = POLLIN;
+                            act_set[num_set].revents = 0;
+                            ++num_set;
+                        }else
+                        {
+                            cout << "no more sockets for client" << endl;
+                            close(new_sock);
+                        }
+                    }else
+                    {
+                        err = readFromClient(act_set[i].fd, buf);
+                        if(err < 0 || strstr(buf,"stop"))
+                        {
+                            cout << "####################################### GET STOP at fd " << act_set[i].fd << endl << endl;
+                            close (act_set[i].fd);
+                            if(i < num_set - 1)
+                            {
+                                act_set[i] = act_set[num_set - 1];
+                                --num_set;
+                                --i;
+                            }
+                        }else
+                        {
+                            writeToClient(act_set[i].fd,buf, baza);
+                        }
+                    }  
+                }
+            }
         }
     }
+    
+    return 0;
 }
+
 
 
 int  readFromClient (int fd, char *buf)
@@ -162,6 +137,7 @@ int  readFromClient (int fd, char *buf)
         return -1;
     }else if(nbytes == 0)
     {
+        cout << "Read nbytes = 0" << endl;
         return -1;
     }else
     {
@@ -180,7 +156,7 @@ void  writeToClient (int fd, char *buf, Baza& baza)
     string message;
 
     baza.work_with_str(message, v1, v2, string(buf));
-    cout << "Start writing to client: " << endl;
+    cout << "Start writing to client" << endl;
     if(v1.size() > 0 || v2.size() > 0) 
     {
         string s;
@@ -233,5 +209,5 @@ void  writeToClient (int fd, char *buf, Baza& baza)
     {
         cout << "Server: write failure" << endl;
     }
-    cout << "Stop writing to client" << endl;
+    cout << "Stop writing to client" << endl << endl;
 }

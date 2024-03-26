@@ -22,8 +22,9 @@ do
     param1="in$i"
     param2="out$i"
     echo "Running program ./cli with paramtrs $param1 and $param2"
-    ./cli $param1 $param2 &
+    ./cli $param1 $param2 > /dev/null &
 done
+
 wait
 jobs
 echo "All programs ended"
@@ -37,8 +38,6 @@ do
     if  diff -q out1 $param 
     then
         flag=$(( $flag + 1))
-    else
-        echo "out1 differ from $param"
     fi
 done 
 
