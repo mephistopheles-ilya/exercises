@@ -262,7 +262,7 @@ void  writeToClientHTTP(int fd, char *buf, Baza& baza)
 
     string name_0 = "", surname_0 = "", surname2_0 = "";
     size_t pos = 0;
-    if((pos = request.find("request_name=")))
+    if((pos = request.find("request_name=")) != string::npos)
     {
         for(size_t i = pos + ("request_name="s).size(); request[i] != '&' && i < request.size(); ++i)
         {
@@ -270,7 +270,7 @@ void  writeToClientHTTP(int fd, char *buf, Baza& baza)
         }
         name = move(convert_str(name_0));
     }
-    if((pos = request.find("request_surname=")))
+    if((pos = request.find("request_surname=")) != string::npos)
     {
         for(size_t i = pos + ("request_surname="s).size(); request[i] != '&' && i < request.size(); ++i)
         {
@@ -278,7 +278,7 @@ void  writeToClientHTTP(int fd, char *buf, Baza& baza)
         }
         surname = move(convert_str(surname_0));
     }
-    if((pos = request.find("request_surname2=")))
+    if((pos = request.find("request_surname2=")) != string::npos)
     {
         for(size_t i = pos + ("request_surname2="s).size(); request[i] != '&' && i < request.size(); ++i)
         {
@@ -286,7 +286,7 @@ void  writeToClientHTTP(int fd, char *buf, Baza& baza)
         }
         surname2 = move(convert_str(surname2_0));
     }
-    if((pos = request.find("request_money=")))
+    if((pos = request.find("request_money=")) != string::npos)
     {
         for(size_t i = pos + ("request_money="s).size(); request[i] != '&' && i < request.size(); ++i)
         {
@@ -295,14 +295,14 @@ void  writeToClientHTTP(int fd, char *buf, Baza& baza)
         size_t pos = money.find('+');
         if(pos != string::npos) money[pos] = ' ';
     }
-    if((pos = request.find("request_currency=")))
+    if((pos = request.find("request_currency=")) != string::npos)
     {
         for(size_t i = pos + ("request_currency="s).size(); request[i] != '&' && i < request.size(); ++i)
         {
             currency.push_back(request[i]);
         }
     }
-    if((pos = request.find("request_bank_account=")))
+    if((pos = request.find("request_bank_account=")) != string::npos)
     {
         for(size_t i = pos + ("request_bank_account="s).size(); request[i] != '&' && i < request.size(); ++i)
         {
